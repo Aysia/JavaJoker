@@ -1,31 +1,36 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Pair;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
-
-import com.linux_girl.mylibrary.JokeActivity;
-import com.udacity.Joker;
-import com.linux_girl.mylibrary.jokeFragment;
+import android.widget.Button;
+import android.widget.ProgressBar;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity implements DisplayJoke {
+
+    static public String JOKE = "JOKE";
+    ProgressBar mSpinner;
+    Button mButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Joker joker = new Joker();
-        //String joke = joker.getJoke();
-        //new EndpointsAsyncTask().execute(new Pair<Context, String>(this, joke));
+
+        mButton = (Button) findViewById(R.id.btnTellJoke);
+        mSpinner = (ProgressBar) findViewById(R.id.progressBar);
+        mSpinner.setVisibility(View.GONE);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mSpinner.setVisibility(View.GONE);
+        mButton.setClickable(true);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,21 +54,14 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void tellJoke(View view) {
-        Joker myJoker = new Joker();
-        Toast.makeText(this, myJoker.getJoke(), Toast.LENGTH_LONG).show();
+    @Override
+    public void openJokeActivity() {
+        openJokeActivity(null);
     }
 
-    public void launchJokeActivity(View view) {
-        /*Intent intent = new Intent(this, JokeActivity.class);
-        Joker joker = new Joker();
-        String joke = joker.getJoke();
-        intent.putExtra(JokeActivity.JOKE_KEY, joke);
-        startActivity(intent);*/
-
-        Joker joker = new Joker();
-        String joke = joker.getJoke();
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, joke));
+    public void openJokeActivity(View view) {
+        mButton.setClickable(false);
+        mSpinner.setVisibility(View.VISIBLE);
+        new EndpointsAsyncTask().execute(this);
     }
-
 }

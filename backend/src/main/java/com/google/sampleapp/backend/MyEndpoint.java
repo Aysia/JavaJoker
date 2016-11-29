@@ -29,15 +29,13 @@ import static javafx.scene.input.KeyCode.J;
 )
 public class MyEndpoint {
 
-    /**
-     * A simple endpoint method that takes a name and says Hi back
-     */
+    /** A simple endpoint method that takes a name and says Hi back */
     @ApiMethod(name = "sayHi")
-    public MyBean tellJoke(@Named("joke") String joke) {
+    public MyBean sayHi() {
         MyBean response = new MyBean();
-        response.setData(joke);
 
         return response;
     }
+
 
 }
